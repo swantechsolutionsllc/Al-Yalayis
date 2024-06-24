@@ -1,0 +1,441 @@
+@extends('admin.layouts.master')
+@section('pageTitle', 'Dashboard')
+@section('breadcrumb')
+    <li><a href="{{url('/')}}"><i class="demo-pli-home"></i></a></li>
+    <li><a href="{{url('/')}}">Dashboard</a></li>
+@endsection
+@section('content')
+    <link href="{{asset('admin-assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+ <style>
+
+
+        #zonesDropDownFillter, #citiesDropDownFillter, #branchesDropDownFillter, #deviceGroupsDropDownFillter {
+            width: 100% !important;
+            text-align: center;
+        }
+        #relationColumn{
+            border-right: solid 4px rgb(235 235 235);
+        }
+
+        .select2-container {
+            margin-bottom: 20px;
+        }
+    </style>
+    <div id="page-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Dashboard</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="panel panel-info panel-colorful">
+                                        <div class="pad-all text-center">
+
+                                            <strong><p>Organizations</p></strong>
+                                            <i style="font-size: 30px" class="fa fa-flag fa-1x"></i>
+                                            <span style="font-size: 30px" class="text-1x text-thin">{{$organizations}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="panel panel-warning panel-colorful">
+                                        <div class="pad-all text-center">
+
+                                            <strong><p>Zones</p></strong>
+                                            <i style="font-size: 30px"  class="fa fa-tablet-alt fa-1x"></i>
+                                            <span style="font-size: 30px"  class="text-1x text-thin">{{count($zones)}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="panel panel-primary panel-colorful">
+                                        <div class="pad-all text-center">
+
+                                            <strong><p>Cities</p></strong>
+                                            <i style="font-size: 30px"  class="fa fa-tablet-alt fa-1x"></i>
+                                            <span style="font-size: 30px"  class="text-1x text-thin">{{$cities}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="panel panel-primary panel-colorful">
+                                        <div class="pad-all text-center">
+
+                                            <strong><p>Branches</p></strong>
+                                            <i style="font-size: 30px"  class="fa fa-tablet-alt fa-1x"></i>
+                                            <span style="font-size: 30px"  class="text-1x text-thin">{{$branches}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+               <div class="panel panel-bordered">
+                   <div class="panel-heading">
+                        <h3 class="panel-title">Logs</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel">
+                             <div class="row">
+                                 <div class="col-sm-2">
+                                     <input type='text' class="form-control" id='date' name="date" required="" placeholder="Select date" />
+                                 </div>
+                                        <div class="col-sm-2">
+                                            <select  id="zonesDropDownFillter" >
+                                                <option value=""></option>
+                                                @foreach($zones as $zone)
+                                                    <option value="{{$zone->id}}">{{$zone->name}}</option>
+                                                @endforeach
+                                            </select>
+
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <select  id="citiesDropDownFillter" disabled="" >
+
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select  id="branchesDropDownFillter" disabled >
+                                            </select>
+
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <select  id="deviceGroupsDropDownFillter" disabled>
+                                            </select>
+
+                                        </div>
+                                    </div>
+                            <div id="timeline">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="panel panel-bordered">
+                    <div class="panel-heading">
+                        <h3 class="panel-title panel-title panel-colorful panel-primary text-center">Currently Running Schedules on devices</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="panel">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <table id="runningSchedule" class="table table-hover">
+                                            <thead id="dashboardTable" class="bg-primary">
+                                                <tr>
+                                                    <th> #</th>
+                                                    <th>City</th>
+                                                    <th>Branch Name</th>
+                                                    <th>Device Group</th>
+                                                    <th>Device</th>
+                                                    <th>Device Template</th>
+                                                </tr>
+
+                                            </thead>
+                                            <tbody>
+                                             @php
+                                                $count = 0;
+                                             @endphp
+                                              @foreach($runningSchedules as $device)
+                                                  @php
+                                                      $count++;
+                                                  @endphp
+                                                <tr>
+                                                    <td>{{$count}}</td>
+                                                    <td>{{$device->city->name}}</td>
+                                                    <td>{{$device->branch->branch_name}}</td>
+                                                    <td>{{$device->deviceGroup->name}}</td>
+                                                    <td>{{$device->device->device_name}}</td>
+                                                    <td><img src="{{asset($device->deviceTemplateData->device_templates->template_images)}}" border="0" width="40" class="img-rounded" align="center" />
+                                                    <br>{{$device->deviceTemplateData->ticker_text}}</td>
+                                                </tr>
+                                              @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@section('js')
+    <script src="{{asset('admin-assets/plugins/flot-charts/jquery.flot.min.js')}}"></script>
+    <script src="{{asset('admin-assets/plugins/flot-charts/jquery.flot.categories.min.js')}}"></script>
+    <script src="{{asset('admin-assets/plugins/flot-charts/jquery.flot.orderBars.min.js')}}"></script>
+    <script src="{{asset('admin-assets/plugins/flot-charts/jquery.flot.tooltip.min.js')}}"></script>
+    <script src="{{asset('admin-assets/plugins/flot-charts/jquery.flot.resize.min.js')}}"></script>
+            <script src="{{asset('admin-assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
+            <script>
+        $("#runningSchedule").DataTable();
+    </script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+        google.load("visualization", "1", {packages:["timeline"]});
+        google.setOnLoadCallback(drawChart);
+
+        function drawChart(devices=null) {
+            if(!devices){
+             var url= "{{Route('chartDevices')}}";
+             $.ajax({
+                    url:url,
+                    type: "GET",
+                    dataType: "json",
+                    success:function(data){
+
+                        draw(data);
+                    }
+                });
+         }else{
+           draw(devices);
+         }
+
+        }
+          function draw(data) {
+
+            var container = document.getElementById('timeline');
+            var chart = new google.visualization.Timeline(container);
+            var dataTable = new google.visualization.DataTable();
+
+            dataTable.addColumn({ type: 'string', id: 'Employee' });
+            dataTable.addColumn({ type: 'date', id: 'Start' });
+            dataTable.addColumn({ type: 'date', id: 'End' });
+            var rows =[];
+             $.each(data, function(key,value){
+
+                if(value.schedules.length > 0 ){
+                     var schedules = value.schedules;
+
+                     $.each(schedules, function(k, val){
+
+                        rows.push([ value.device_name, new Date(Date.parse(val.start_time)), new Date(Date.parse(val.end_time) ) ]);
+                     });
+
+
+                }else{
+                    rows.push([ value.device_name, new Date(), new Date() ]);
+                }
+
+                            });
+            dataTable.addRows(rows);
+            var options = {
+                timeline: {
+                    colorByRowLabel: true,
+                    groupByRowLabel: true,
+                },
+                chartArea:{left:0,top:0,width:"100%",height:"100%"},
+                height: 300,
+                backgroundColor: '#ffffff'
+            };
+
+            chart.draw(dataTable, options);
+            (function(){                      //anonymous self calling function to prevent variable name conficts
+                var el=container.getElementsByTagName("rect");    //get all the descendant rect element inside the container
+                var width=3;                //set a large initial value to width
+                var elToRem=[];                   //element would be added to this array for removal
+                for(var i=el.length;i--;){              //looping over all the rect element of container
+                    var cwidth=parseInt(el[i].getAttribute("width"));//getting the width of ith element
+                    if(cwidth<width){               //if current element width is less than previous width then this is min. width and ith element should be removed
+                        //console.log(cwidth);
+                        elToRem=[el[i]];
+                        width=cwidth;               //setting the width with min width
+                    }
+                    else if(cwidth==width){             //if current element width is equal to previous width then more that one element would be removed
+                        elToRem.push(el[i]);
+                    }
+                }
+                for(i=elToRem.length;i--;)
+                    elToRem[i].setAttribute("fill","none"); //invisiblize all the rect element which has minimum width
+            })();
+
+        }
+        $("#zonesDropDownFillter").select2({
+            placeholder: "Select Zone",
+            allowClear: true
+        });
+        $("#citiesDropDownFillter").select2({
+            placeholder: "Select City",
+            allowClear: true
+        });
+        $("#branchesDropDownFillter").select2({
+            placeholder: "Select Branch",
+            allowClear: true
+        });
+        $("#deviceGroupsDropDownFillter").select2({
+            placeholder: "Select Device Group",
+            allowClear: true
+        });
+        $('#date').datepicker({
+            autoclose:true
+
+        }).datepicker("setDate", 'today');
+
+        $("#date").change(function (){
+            var date = $("#date").val();
+            var zone_id = $("#zonesDropDownFillter").val();
+            var branch_id = $("#branchesDropDownFillter").val();
+            var city_id = $("#citiesDropDownFillter").val();
+            var group_id = $("#deviceGroupsDropDownFillter").val();
+            var url = "{{url('get-group-devices/')}}";
+            $.ajax({
+                url:url,
+                type: "GET",
+                data: {
+                    date:date,
+                    zone_id: zone_id,
+                    city_id: city_id,
+                    branch_id: branch_id,
+                    group_id:group_id
+                },
+                dataType: "json",
+                success:function(data){
+                    if(data.devices.length > 0){
+                        drawChart(data.devices);
+                    }else{
+                        $("#timeline").html('<center>'+data.message+'</center>');
+                    }
+
+                }
+            });
+        })
+
+   $("#zonesDropDownFillter").change(function(){
+
+
+        var zone_id = $(this).val();
+        var date = $("#date").val();
+            if(zone_id){
+                var url= "{{url('get-cities/')}}";
+                $.ajax({
+                        url:url+'/'+zone_id,
+                        type: "GET",
+                        data: {
+                            date:date,
+                            devices:true,
+                        },
+                        dataType: "json",
+                        success:function(data){
+                             if(data.devices.length > 0){
+                                 drawChart(data.devices)
+                             }else{
+                                 $("#timeline").html('<center>No device Found in this zone</center>');
+                             }
+                            $('#citiesDropDownFillter').empty().val('');
+                            $('#branchesDropDownFillter').empty().attr('disabled', true).val('');
+                            $('#deviceGroupsDropDownFillter').empty().attr('disabled', true).val('');
+                            $('#citiesDropDownFillter').removeAttr('disabled');
+                            $('#citiesDropDownFillter').append('<option value=""></option>');
+
+                            $.each(data.cities, function(key,value){
+                               $('#citiesDropDownFillter').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                            });
+                        }
+                });
+            }
+
+   });
+    $("#citiesDropDownFillter").change(function(){
+
+            var city_id = $(this).val();
+            var date = $("#date").val();
+            if(city_id){
+               var url= "{{url('get-branches/')}}";
+                $.ajax({
+                        url:url+'/'+city_id,
+                    type: "GET",
+                    data: {
+                        date:date,
+                        devices:true,
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        if(data.devices.length > 0){
+                            drawChart(data.devices);
+                        }else{
+                            $("#timeline").html('<center>No device Found in this city</center>');
+                        }
+                        $('#branchesDropDownFillter').empty().val('');
+                        $('#deviceGroupsDropDownFillter').empty().attr('disabled', true).val();
+                        $('#branchesDropDownFillter').removeAttr('disabled');
+                        $('#branchesDropDownFillter').append('<option value=""></option>');
+
+                        $.each(data.branches, function(key,value){
+                           $('#branchesDropDownFillter').append('<option value="'+ value.id +'">'+ value.branch_name +'</option>');
+
+                        });
+                    }
+                });
+            }
+        });
+    $("#branchesDropDownFillter").change(function(){
+            var branch_id = $(this).val();
+            var date = $("#date").val();
+            if(branch_id){
+               var url= "{{url('get-device-groups/')}}";
+                $.ajax({
+                        url:url+'/'+branch_id,
+                    type: "GET",
+                    data: {
+                        date:date,
+                        devices:true,
+                    },
+                    dataType: "json",
+                    success:function(data){
+                        if(data.devices.length > 0){
+                            drawChart(data.devices);
+                        }else{
+                            $("#timeline").html('<center>No device Found in this Branch</center>');
+                        }
+                        $('#deviceGroupsDropDownFillter').empty().val('');
+                        $('#deviceGroupsDropDownFillter').removeAttr('disabled');
+                        $('#deviceGroupsDropDownFillter').append('<option value=""></option>');
+
+                        $.each(data.deviceGroups, function(key,value){
+                           $('#deviceGroupsDropDownFillter').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+
+                        });
+                    }
+                });
+            }
+
+        });
+     $("#deviceGroupsDropDownFillter").change(function(){
+         var group_id = $(this).val();
+         var date = $("#date").val();
+         if(group_id){
+             var url= "{{url('get-group-devices/')}}";
+             $.ajax({
+                 url:url,
+                 type: "GET",
+                 data: {
+                     date:date,
+                     group_id:group_id
+                 },
+                 dataType: "json",
+                 success:function(data){
+                     if(data.devices.length > 0){
+                         drawChart(data.devices);
+                     }else{
+                         $("#timeline").html('<center>No device Found in this Device Group</center>');
+                     }
+
+                 }
+             });
+         }
+     });
+
+    </script>
+@endsection

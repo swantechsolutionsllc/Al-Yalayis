@@ -1,0 +1,39 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Branch;
+use App\City;
+use App\Device;
+use App\DeviceGroup;
+use App\Organization;
+use App\Zone;
+use Illuminate\Support\Facades\Session;
+use App\Schedule;
+class DashboardController extends Controller
+{
+    public function index(){
+        date_default_timezone_set('Asia/Dubai');
+        $branches = Branch::all()->count();
+        $organizations = Organization::all()->count();
+        $zones = Zone::all();
+        $cities = City::all()->count();
+        $devices = Device::with('schedules')->get();
+        $deviceGroups = DeviceGroup::all()->count();
+        $now =  $start_time = date('m-d-Y H:i:s');
+      //dd($now);
+        $runningSchedules = Schedule::with(['zone', 'city', 'branch', 'deviceGroup', 'device', 'deviceTemplateData.device_templates'])->where('start_time', '<=', $now )->where('end_time', '>=', $now)->get();
+        return view('admin.dashboard',compact('branches','organizations','zones','cities', 'runningSchedules', 'devices'));
+    }
+    public function chartDevices(){
+          $devices = Device::with(['schedules'=>function($query){
+            $start_time =   date('m-d-Y 00:00');
+            $end_time = date('m-d-Y 23:59');
+
+                $query->where('start_time','>=', $start_time);
+                $query->where('end_time','<=', $end_time);
+
+         }])->get();
+         return json_encode($devices);
+    }
+}
