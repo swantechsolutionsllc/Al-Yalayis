@@ -1,0 +1,4 @@
+2024-06-24 12:39:00 Command sent on Counter Display 1 ip: 192.168.0.106
+2024-06-24 12:39:00 Command sent on Counter Display 2 ip: 192.168.0.103
+2024-06-24 12:39:00 Command sent on Main Display 1 ip: 192.168.0.108
+2024-06-24 12:40:12 "downloadStatus,2,100"
