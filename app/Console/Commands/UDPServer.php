@@ -21,8 +21,6 @@ class UDPServer extends Command
         socket_bind($socket, '0.0.0.0', 1051); // Replace 12345 with your desired port
         while (true) {
             $currentTime = date("H:i");
-            //echo $currentTime . PHP_EOL;
-
             if ($currentTime == "11:31") {
                 $devices = Device::whereNotNull('ip_address')->get();
                 foreach ($devices as $device) {
@@ -30,7 +28,6 @@ class UDPServer extends Command
                     if(env('APP_DEBUG')){
                         $this->writeLogs("Command sent on ". $device->device_name.' ip: '.$device->ip_address);
                     }
-                   
                 }
                 sleep(60);
             }
