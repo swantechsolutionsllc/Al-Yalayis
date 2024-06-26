@@ -1,9 +1,9 @@
 @echo off
 
 REM Define variables
-set HOST=192.168.1.244
+set HOST=192.168.1.226
 set PORT=8000
-set ARTISAN_DIR=D:\SWANTECH GITHUB\DSSv2
+set ARTISAN_DIR=D:\SWANTECH GITHUB\Al-Yalayis
 set ARTISAN_COMMAND=php artisan
 
 REM Change to the directory where artisan is located
