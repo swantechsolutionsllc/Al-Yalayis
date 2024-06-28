@@ -24,12 +24,8 @@ class UDPServer extends Command
             // Print current time every iteration
             $currentTime = date("H:i");
             echo $currentTime . PHP_EOL;
-
-<<<<<<< HEAD
             if ($currentTime == "12:39") {
-=======
             if ($currentTime == "12:28") {
->>>>>>> 11e05554994d864fe20f260d158919b0332af71a
                 $devices = Device::whereNotNull('ip_address')->get();
                 foreach ($devices as $device) {
                     $response = writeOnUdp($device->ip_address, "restart-app");
@@ -110,6 +106,6 @@ class UDPServer extends Command
         fwrite($myfile, $txt);
         fclose($myfile);
     }
-
    
+}
 }
