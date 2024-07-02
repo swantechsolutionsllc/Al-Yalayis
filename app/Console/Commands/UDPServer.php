@@ -29,7 +29,7 @@ class UDPServer extends Command
             if ($currentTime == "12:39") {
                 $devices = Device::whereNotNull('ip_address')->get();
                 foreach ($devices as $device) {
-                    $response = writeOnUdp($device->ip_address, "restart-app");
+                    $response = writeOnUdp($device->ip_address, "restartApplication");
                     if(env('APP_DEBUG')){
                         $this->writeLogs("Command sent on ". $device->device_name.' ip: '.$device->ip_address);
                     }
