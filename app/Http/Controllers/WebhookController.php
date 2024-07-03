@@ -40,12 +40,12 @@ class WebhookController extends Controller
             $device->is_online = 0;
             $device->update();
         }
-        if($request->ticketNo){
+//        if($request->ticketNo){
             if($device && $device->ip_address && $message){
                 
                 $response =  writeOnUdp($device->ip_address, $message);
             }  
-        }
+  //      }
         if($mainDisplays &&  $mdMessage){
             foreach($mainDisplays as $md){
                 $response =  writeOnUdp($md->ip_address, $mdMessage);
