@@ -47,7 +47,7 @@ class DeviceController extends Controller
     public function store(Request $request)
     {
 
-        
+        Artisan::call('cache:clear');
         $validationRules = [
             'device_name'           => 'required|unique:devices',
             'device_no'             => 'required|unique:devices',
@@ -231,7 +231,7 @@ class DeviceController extends Controller
     }
     public function publishContent(){
         $data       = Cache::forget('udp_data');
-        $devices    = Device::whereNotNull('ip_address')->get();
+        $devices    = Device::whereNotNull('ip_address')->orderBy('id', 'DESC')->get();
         $inserted   = 0;
         ActionQueue::truncate();
         foreach($devices as $device){

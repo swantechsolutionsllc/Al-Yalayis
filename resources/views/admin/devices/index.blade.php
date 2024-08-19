@@ -97,14 +97,14 @@
             max-width:100%;
             height:40px;
         }
-        div.action-btns {
+        div.action-btnss {
             display: flex;
             justify-content: space-between;
             align-items: center;
             width: 100%;
             gap: 5px;
         }
-        div.action-btns button {
+        div.action-btnss button {
             width: 50%;
         }
     </style>
@@ -213,7 +213,7 @@
                             @endif
                             
                         </ul>
-                            <div class="action-btns" id="action-btns-{{$d->id}}"  >
+                            <div class="action-btnss" id="action-btns-{{$d->id}}"  >
                                 <button class="btn  btn-primary small-font action-btns device-{{$d->id}}" data-id="{{$d->id}}"  data-action="rebootDevice">Reboot Device</button>
                                 <button class="btn  btn-primary small-font action-btns device-{{$d->id}}" data-id="{{$d->id}}"  data-action="restartApplication">Restart App</button>
                                

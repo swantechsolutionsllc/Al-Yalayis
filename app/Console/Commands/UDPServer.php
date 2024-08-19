@@ -9,6 +9,7 @@ use App\Device;
 use App\ActionQueue;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Artisan;
 
 class UDPServer extends Command
 {
@@ -19,23 +20,33 @@ class UDPServer extends Command
     {
         $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
         socket_bind($socket, '0.0.0.0', 1051); // Replace 12345 with your desired port
-
+        $lastExecutionTime = Carbon::now();
         while (true) {
             // Print current time every iteration
             $currentTime = date("H:i");
+<<<<<<< HEAD
             echo $currentTime . PHP_EOL;
             if ($currentTime == "12:39") {
             if ($currentTime == "12:28") {
+=======
+           // echo $currentTime . PHP_EOL;
+
+            if ($currentTime == "12:39") {
+>>>>>>> cd4f15f1b381564c762ca93a767d7629509b52f1
                 $devices = Device::whereNotNull('ip_address')->get();
                 foreach ($devices as $device) {
-                    $response = writeOnUdp($device->ip_address, "restart-app");
+                    $response = writeOnUdp($device->ip_address, "restartApplication");
                     if(env('APP_DEBUG')){
                         $this->writeLogs("Command sent on ". $device->device_name.' ip: '.$device->ip_address);
                     }
                 }
                 sleep(60);
             }
-
+            
+            if (Carbon::now()->diffInMinutes($lastExecutionTime) >= 5) {
+                Artisan::call('update-content-queue');
+                $lastExecutionTime = Carbon::now();
+            }
             $read = [$socket];
             $write = null;
             $except = null;
@@ -107,5 +118,8 @@ class UDPServer extends Command
         fclose($myfile);
     }
    
+<<<<<<< HEAD
 }
+=======
+>>>>>>> cd4f15f1b381564c762ca93a767d7629509b52f1
 }

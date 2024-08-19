@@ -13,15 +13,18 @@ class WebhookController extends Controller
         $data = QmsWebhook::create([
             'content' => json_encode($request->all())
         ]);
+        $counterStatus = strtolower($request->counterStatus);
        // $device = Cache::rememberForever("device_".$request->counterNo, function () use($request){
             $device = Device::where('qms_name', $request->counterNo)->first();
+           
         //});
         $mainDisplays = Cache::rememberForever("device_mds_".$device->id, function () use($device) {
             $ids = DB::table('main_display_counter')->where('counter_display', $device->id)->get()->pluck('main_display')->toArray();
-            return Device::whereIn('id', $ids)->get();
+            return Device::select('ip_address')->whereIn('id', $ids)->get();
         });
         //dd($mainDisplays);
-        if($request->eventName == 'onCounterLogin'){
+        $message =  $mdMessage = '';
+        if($request->eventName == 'onCounterLogin' && $counterStatus == 'done'){
             $message = "login,".$request->counterNo;
             $mdMessage = "login,".$request->counterNo;
             $device->is_online = 1;
@@ -29,7 +32,7 @@ class WebhookController extends Controller
         }elseif($request->eventName == 'onTokenCall' || $request->eventName == 'OnNextCall' ){
             $message = "ticketCall,".$request->ticketNo.",".$request->customerName.",".$request->customerEmail.",".$request->serviceName;
             $mdMessage = "ticketCall,".$request->counterNo.",".$request->ticketNo.",".$request->serviceName;
-            echo $mdMessage;
+          //  echo $mdMessage;
         }
         elseif($request->eventName == 'onCounterLogout'){
             $message = "logout,".$request->staffId;
@@ -37,13 +40,13 @@ class WebhookController extends Controller
             $device->is_online = 0;
             $device->update();
         }
-        if($request->ticketNo){
+//        if($request->ticketNo){
             if($device && $device->ip_address && $message){
+                
                 $response =  writeOnUdp($device->ip_address, $message);
-            }
-           
-        }
-        if($mainDisplays){
+            }  
+  //      }
+        if($mainDisplays &&  $mdMessage){
             foreach($mainDisplays as $md){
                 $response =  writeOnUdp($md->ip_address, $mdMessage);
             }
