@@ -230,33 +230,34 @@ class DeviceController extends Controller
         $client->close();
     }
     public function publishContent(){
-        $data       = Cache::forget('udp_data');
-        $devices    = Device::whereNotNull('ip_address')->orderBy('id', 'DESC')->get();
-        $inserted   = 0;
-        ActionQueue::truncate();
-        foreach($devices as $device){
-            $action = ActionQueue::where(['device_id'=> $device->id,'event'=> 'update-content'])->whereNull('started_at')->whereNull('completed_at')->first();
-            if(!$action){
-                $inserted++;
-                ActionQueue::create([
-                    'device_id'     => $device->id,
-                    'event'        => 'update-content',
-                    'order'         => $inserted
-                ]);
-                $device->content_download_page = 0;
-                $device->update();
-            }
-        }
-        if($inserted){
-            $action = ActionQueue::whereNull('started_at')->whereNull('requested_at')->with('device')->first();
+        // $data       = Cache::forget('udp_data');
+        // $devices    = Device::whereNotNull('ip_address')->orderBy('id', 'DESC')->get();
+        // $inserted   = 0;
+        // ActionQueue::truncate();
+        // foreach($devices as $device){
+        //     $action = ActionQueue::where(['device_id'=> $device->id,'event'=> 'update-content'])->whereNull('started_at')->whereNull('completed_at')->first();
+        //     if(!$action){
+        //         $inserted++;
+        //         ActionQueue::create([
+        //             'device_id'     => $device->id,
+        //             'event'        => 'update-content',
+        //             'order'         => $inserted
+        //         ]);
+        //         $device->content_download_page = 0;
+        //         $device->update();
+        //     }
+        // }
+        // if($inserted){
+        //     $action = ActionQueue::whereNull('started_at')->whereNull('requested_at')->with('device')->first();
             
-            if($action && $action->device && $action->device->ip_address){
-                $action->requested_at = Carbon::now();
-                $action->update();
-                $response =  writeOnUdp($action->device->ip_address, "updateContent,".$action->id);
+        //     if($action && $action->device && $action->device->ip_address){
+        //         $action->requested_at = Carbon::now();
+        //         $action->update();
+        //         $response =  writeOnUdp($action->device->ip_address, "updateContent,".$action->id);
                   
-            } 
-        }
+        //     } 
+        // }
+        $devices    = Device::whereNotNull('ip_address')->with('actionQueue')->get();
        return view('admin.devices.publish', compact('devices'));
     }
     public function deviceActions(Request $request){
@@ -305,5 +306,33 @@ class DeviceController extends Controller
                 $response =  writeOnUdp($action->device->ip_address, "updateContent,".$action->id);                    
             } 
         }
+    }
+    public function publishContentStore(Request $request){
+        $devices    = Device::whereNotNull('ip_address')->whereIn('id', $request->device_id)->get();
+        $inserted   = 0;
+        ActionQueue::truncate();
+        foreach($devices as $device){
+            $action = ActionQueue::where(['device_id'=> $device->id,'event'=> 'update-content'])->whereNull('started_at')->whereNull('completed_at')->first();
+            if(!$action){
+                $inserted++;
+                ActionQueue::create([
+                    'device_id'     => $device->id,
+                    'event'        => 'update-content',
+                    'order'         => $inserted
+                ]);
+                $device->content_download_page = 0;
+                $device->update();
+            }
+        }
+        if($inserted){
+            $action = ActionQueue::whereNull('started_at')->whereNull('requested_at')->with('device')->first();
+            
+            if($action && $action->device && $action->device->ip_address){
+                $action->requested_at = Carbon::now();
+                $action->update();
+                writeOnUdp($action->device->ip_address, "updateContent,".$action->id); 
+            } 
+        }
+        return back()->with('success','Content Update Request Sent Successfully');
     }
 }

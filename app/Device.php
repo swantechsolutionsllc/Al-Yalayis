@@ -159,4 +159,7 @@ class Device extends Model
     // {
     //     return $this->setting;
     // }
+    public function actionQueue(){
+        return $this->hasOne(actionQueue::class)->latest();
+    }
 }

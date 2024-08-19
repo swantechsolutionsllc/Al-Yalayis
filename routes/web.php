@@ -24,6 +24,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('branches', 'Admin\BranchController');
     Route::resource('devices', 'Admin\DeviceController');
     Route::get('publish-content', 'Admin\DeviceController@publishContent')->name('admin.publish-content');
+    Route::post('publish-content', 'Admin\DeviceController@publishContentStore')->name('admin.publish-content-store');
     Route::post('device-actions', 'Admin\DeviceController@deviceActions')->name('admin.device-actions');
     Route::get('fetch-udp-data', 'Admin\DeviceController@fetchUdpData')->name('admin.fetch-udp-data');
     Route::get('send-ping-message', 'Admin\DeviceController@sendPingMessage')->name('admin.send-ping-to-devices');
