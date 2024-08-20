@@ -148,8 +148,8 @@
                                         </div> 
                                       
                                         <div class="col-2 h6">{{$d->device_name}}</div> 
-                                        <div class="col-2 "></div> 
-                                        <div class="col-2 "></div> 
+                                        <div class="col-2 ">{{$d->actionQueue && $d->actionQueue->requested_at? $d->actionQueue->requested_at:'N/A'}}</div> 
+                                        <div class="col-2 ">{{$d->actionQueue && $d->actionQueue->completed_at? $d->actionQueue->completed_at:'N/A'}}</div> 
                                         <div class="col-2 "></div> 
                                         <div class="col-2 h6">
                                             @if($d->actionQueue)
