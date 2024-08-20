@@ -34,6 +34,7 @@ Route::group(['middleware' => ['api.logger']], function () {
     Route::get('staff-details/{staffid}','API\DevicesController@staffDetails');
     Route::get('check-device-status/{name_qms}','API\DevicesController@deviceStatus');
     Route::get('counter-content/{id}','API\DevicesController@counterContent');
+    Route::get('device-settings/{device_id}','API\DevicesController@deviceSettings');
 #    Route::get('device-templates/{id}','API\DeviceTemplatesController@device_templates')->name('device_templates');
 #    Route::post('update-device','API\DevicesController@update_device');
  #   Route::get('get-schedule-single','API\ScheduleController@getSingleSchedule')->name('single-schedule');

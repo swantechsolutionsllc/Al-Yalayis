@@ -413,6 +413,17 @@ class DevicesController extends BaseController
         $device = Device::select('qms_port_no', 'qms_name','ticket_color', 'counter_no_color', 'ticket_no_blinking_color', 'ticket_no_font_size', 'counter_no_font_size', 'background_content', 'content_type' )->where(['id'=> $id, 'device_type'=> 'cd'])->first();
         return $this->sendResponse($device, '');
     }
+    public function deviceSettings($id){
+        $device = Device::where('id', $id)->with('staff')->first();
+        if($device->device_type == 'md'){
+            $device->settings = $device->mdSetting;
+            unset($device->mdSetting);
+        }else{
+            $device->settings = $device->cdSetting;
+            unset($device->cdSetting);
+        }
+        return $this->sendResponse($device, '');
+    }
 }
 
 
