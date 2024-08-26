@@ -71,33 +71,6 @@ class MdSettingsController extends Controller
             'ticket_text_size'                  => $request->ticket_text_size,
             'ticket_font_family'                => $request->ticket_font_family,
             'ticket_text_direction'             => $request->ticket_text_direction,
-            'ticket_text_speed'                 => $request->ticket_text_speed,
-
-
-            'history_area_heading_bg_color'     => $request->history_area_heading_bg_color,
-            'history_area_heading_text_size'    => $request->history_area_heading_text_size,
-            'history_area_content_color_even'   => $request->history_area_content_color_even,
-           
-
-            
-            'main_area_content_bg_color_odd'     => $request->mai_area_content_bg_color_odd,
-            'main_area_content_bg_color_even'    => $request->mai_area_content_bg_color_even,
-            'no_of_column'                      => $request->no_of_column,
-            
-            
-            
-            'audio_2'                           => $request->audio_2,
-            
-            'blinking_color'                    => $request->blinking_color,
-            
-            
-            
-            
-            
-            
-            
-           
-            
         ]);
         return redirect()->route('md-settings.index')->with('success','Settings Created Successfully');
     }
@@ -136,21 +109,27 @@ class MdSettingsController extends Controller
     {
         // dd($request->all());
         $setting = MdSetting::findOrFail($id);
-            $setting->setting_name                      = $request->setting_name;
-            $setting->history_area_heading_bg_color     = $request->history_area_heading_bg_color;
-            $setting->history_area_heading_text_size    = $request->history_area_heading_text_size;
-            $setting->history_area_content_color_even   = $request->history_area_content_color_even;
+            $setting->setting_name                          = $request->setting_name;
             $setting->main_area_heading_bg_color        = $request->main_area_heading_bg_color;
+            $setting->main_area_heading_text_color      = $request->main_area_heading_text_color;
             $setting->main_area_heading_text_size       = $request->main_area_heading_text_size;
-            $setting->main_area_content_bg_color_odd     = $request->mai_area_content_bg_color_odd;
-            $setting->main_area_content_bg_color_even    = $request->mai_area_content_bg_color_even;
-            $setting->no_of_column                      = $request->no_of_column;
+            $setting->main_area_content_bg_color        = $request->main_area_content_bg_color;
+            $setting->main_content_area_text_color      = $request->main_content_area_text_color;
+            $setting->main_content_area_text_size       = $request->main_content_area_text_size;
+            $setting->main_content_area_blinking_color  = $request->main_content_area_blinking_color;
+            $setting->history_heading_area_bg_color     = $request->history_heading_area_bg_color;
+            $setting->history_heading_area_bg_text_color= $request->history_heading_area_bg_text_color;
+            $setting->history_heading_area_text_size    = $request->history_heading_area_text_size;
+            $setting->history_content_area_odd_bg_color = $request->history_content_area_odd_bg_color;
+            $setting->history_content_area_odd_text_color= $request->history_content_area_odd_text_color;
+            $setting->history_content_area_odd_text_size= $request->history_content_area_odd_text_size;
+            $setting->history_content_area_even_bg_color= $request->history_content_area_even_bg_color;
+            $setting->history_content_area_even_text_color=$request->history_content_area_even_text_color;
+            $setting->history_content_area_even_text_size=$request->history_content_area_even_text_size;
             $setting->no_of_rows                        = $request->no_of_rows;
             $setting->text_alignment                    = $request->text_alignment;
-            $setting->audio_1                           = $request->audio_1;
-            $setting->audio_2                           = $request->audio_2;
+            $setting->audio                             = $request->audio;
             $setting->language                          = $request->language;
-            $setting->blinking_color                    = $request->blinking_color;
             $setting->logo_alignment                    = $request->logo_alignment;
             $setting->header_background_color           = $request->header_background_color;
             $setting->date_time_color                   = $request->date_time_color;
@@ -161,8 +140,6 @@ class MdSettingsController extends Controller
             $setting->ticket_text_size                  = $request->ticket_text_size;
             $setting->ticket_font_family                = $request->ticket_font_family;
             $setting->ticket_text_direction             = $request->ticket_text_direction;
-            $setting->ticket_text_speed                 = $request->ticket_text_speed;
-
         $setting->update();
 
         return redirect()->route('md-settings.index')->with('success','Settings Updated Successfully');
