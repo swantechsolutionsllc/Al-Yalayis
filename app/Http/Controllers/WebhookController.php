@@ -13,6 +13,8 @@ class WebhookController extends Controller
         $data = QmsWebhook::create([
             'content' => json_encode($request->all())
         ]);
+        if($request->counterNo && $request->counterNo != null && $request->counterNo !='null'){
+
         $counterStatus = strtolower($request->counterStatus);
        // $device = Cache::rememberForever("device_".$request->counterNo, function () use($request){
             $device = Device::where('qms_name', $request->counterNo)->first();
@@ -52,5 +54,6 @@ class WebhookController extends Controller
             }
         }
     }
+}
     
 }
