@@ -8,18 +8,35 @@ set ARTISAN_COMMAND=php artisan
 
 REM Change to the directory where artisan is located
 cd /d %ARTISAN_DIR%
-
-REM Clear the cache
-%ARTISAN_COMMAND% cache:clear
-
-REM Clear the configuration cache
-%ARTISAN_COMMAND% config:clear
+if errorlevel 1 (
+    echo Failed to change directory to %ARTISAN_DIR%
+    pause
+    exit /b
+)
 
 REM Start the Laravel development server on the specified host and port
-start "" %ARTISAN_COMMAND% serve --host=%HOST% --port=%PORT%
+start "Laravel Server" cmd /k "%ARTISAN_COMMAND% serve --host=%HOST% --port=%PORT%"
+if errorlevel 1 (
+    echo Failed to start Laravel development server
+    pause
+    exit /b
+)
 
 REM Start the UDP listener
-start "" %ARTISAN_COMMAND% udp:listen
+start "UDP Listener" cmd /k "%ARTISAN_COMMAND% udp:listen"
+if errorlevel 1 (
+    echo Failed to start UDP listener
+    pause
+    exit /b
+)
 
-REM Wait for key press to close the command prompt window
+REM Start the Laravel Echo server
+start "Laravel Echo Server" cmd /k "npx laravel-echo-server start"
+if errorlevel 1 (
+    echo Failed to start Laravel Echo server
+    pause
+    exit /b
+)
+
+REM Keep the main command prompt window open
 pause

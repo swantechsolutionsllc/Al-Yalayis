@@ -1,0 +1,19 @@
+2024-09-03 14:53:10 "updateContent,2"
+2025-01-30 15:54:42 "updateContent,1"
+2025-01-30 16:01:26 "updateContent,1"
+2025-01-30 16:09:33 "updateContent,1"
+2025-01-30 16:14:34 "updateContent,1"
+2025-01-30 16:20:16 "downloadStatus,3,100"
+2025-01-30 16:20:47 "downloadStatus,3,100"
+2025-01-30 16:22:09 "downloadStatus,1,100"
+2025-01-30 16:25:24 "downloadStatus,1,50,"
+2025-01-30 16:25:31 "downloadStatus,1,100,"
+2025-01-30 16:26:05 "downloadStatus,1,33,"
+2025-01-30 16:26:06 "downloadStatus,1,66,"
+2025-01-30 16:26:07 "downloadStatus,1,100,"
+2025-01-30 16:45:14 "downloadStatus,1,33,"
+2025-01-30 16:45:16 "downloadStatus,1,66,"
+2025-01-30 16:45:17 "downloadStatus,1,100,"
+2025-01-31 12:39:00 Command sent on Counter Display 1 ip: 192.168.0.111
+2025-01-31 12:39:00 Command sent on Counter Display 2 ip: 192.168.0.103
+2025-01-31 12:39:00 Command sent on Main Display 1 ip: 10.255.254.16

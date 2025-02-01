@@ -31,7 +31,7 @@ class WebhookController extends Controller
             $mdMessage = "login,".$request->counterNo;
             $device->is_online = 1;
             $device->update();
-        }elseif($request->eventName == 'onTokenCall' || $request->eventName == 'OnNextCall' ){
+        }elseif($request->eventName == 'onTokenCall' ||  $request->eventName == 'OnNextCall' ||  $request->eventName == 'onTokenRecall' ){
             $message = "ticketCall,".$request->ticketNo.",".$request->customerName.",".$request->customerEmail.",".$request->serviceName;
             $mdMessage = "ticketCall,".$request->counterNo.",".$request->ticketNo.",".$request->serviceName;
           //  echo $mdMessage;
