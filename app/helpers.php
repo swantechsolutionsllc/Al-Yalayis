@@ -10,7 +10,7 @@ use \App\DeviceGroup;
 
     function writeOnUdp($ip, $message){
        // dd($ip);
-        $socket = @fsockopen("udp://$ip", 1051, $errno, $errstr); 
+        $socket = @fsockopen("udp://$ip", 1050, $errno, $errstr); 
         if ($socket) {
             fwrite($socket, $message);
             fclose($socket);

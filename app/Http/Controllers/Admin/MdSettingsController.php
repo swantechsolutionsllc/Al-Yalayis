@@ -140,6 +140,7 @@ class MdSettingsController extends Controller
             $setting->ticket_text_size                  = $request->ticket_text_size;
             $setting->ticket_font_family                = $request->ticket_font_family;
             $setting->ticket_text_direction             = $request->ticket_text_direction;
+            $setting->ticket_text_speed                 = $request->ticket_text_speed;
         $setting->update();
 
         return redirect()->route('md-settings.index')->with('success','Settings Updated Successfully');

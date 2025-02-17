@@ -19,7 +19,7 @@ class UDPServer extends Command
     public function handle()
     {
         $socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
-        socket_bind($socket, '0.0.0.0', 1051); // Replace 12345 with your desired port
+        socket_bind($socket, '0.0.0.0', 1050); // Replace 12345 with your desired port
         $lastExecutionTime = Carbon::now();
         while (true) {
             // Print current time every iteration

@@ -122,12 +122,12 @@
                                 <div class="row h4"> </div> 
                                 <div class="row h4">
                                     <div class="col-1"> <input type="checkbox" id="check-all"></div>
-                                    <div class="col-2">Device</div>
-                                    <div class="col-2">Requested At</div> 
+                                    <div class="col-4">Device</div>
+                                    {{-- <div class="col-2">Requested At</div> 
                                     <div class="col-2">Completed At</div> 
-                                    <div class="col-2">Total Attempts</div> 
-                                    <div class="col-2">Progress</div> 
-                                    <div class="col-1 text-center">Action</div>
+                                    <div class="col-2">Total Attempts</div>  --}}
+                                    <div class="col-7">Progress</div> 
+                                    {{-- <div class="col-1 text-center">Action</div> --}}
                                 </div>
                                 @foreach($devices as $d)
                                     @php
@@ -147,21 +147,21 @@
                                             <input type="checkbox" name="device_id[]" value="{{$d->id}}">
                                         </div> 
                                       
-                                        <div class="col-2 h6">{{$d->device_name}}</div> 
-                                        <div class="col-2 ">{{$d->actionQueue && $d->actionQueue->requested_at? $d->actionQueue->requested_at:'N/A'}}</div> 
-                                        <div class="col-2 ">{{$d->actionQueue && $d->actionQueue->completed_at? $d->actionQueue->completed_at:'N/A'}}</div> 
-                                        <div class="col-2 "></div> 
-                                        <div class="col-2 h6">
+                                        <div class="col-4 h6">{{$d->device_name}}</div> 
+                                        {{-- <div class="col-2 ">{{$d->actionQueue && $d->actionQueue->requested_at? $d->actionQueue->requested_at:'N/A'}}</div> 
+                                        <div class="col-2 ">{{$d->actionQueue && $d->actionQueue->completed_at? $d->actionQueue->completed_at:'N/A'}}</div>  --}}
+                                        {{-- <div class="col-2 "></div>  --}}
+                                        <div class="col-7 h6">
                                             @if($d->actionQueue)
                                                 <div class="progress">
                                                     <div role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" id="device-progress-{{$d->id}}" class="progress-bar progress-bar-striped progress-bar-animated {{$class}}" style="width: {{ $width }}%;">{{ $width }}%</div>
                                                 </div>
                                             @endif
                                         </div>
-                                        <div class="col-1 text-center">
+                                        {{-- <div class="col-1 text-center">
                                             <span class="btn btn-primary fa fa-eye"></span> 
                                             <span class="btn btn-danger fa fa-times"></span>
-                                        </div>
+                                        </div> --}}
                                     </div>
                                 @endforeach
                                 <br>
