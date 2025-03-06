@@ -1,1 +1,0 @@
-ALTER TABLE action_queues ADD order INT NULL DEFAULT NULL AFTER updated_at;

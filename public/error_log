@@ -1,2 +1,0 @@
-[06-Sep-2022 13:13:56 UTC] PHP Fatal error:  Cannot redeclare App\Device::boot() in /home/b9w657xgjhw4/public_html/cslab.swantech.ae/app/Device.php on line 73
-[06-Sep-2022 13:14:07 UTC] PHP Fatal error:  Cannot redeclare App\Device::boot() in /home/b9w657xgjhw4/public_html/cslab.swantech.ae/app/Device.php on line 73
